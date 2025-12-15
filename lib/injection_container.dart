@@ -14,7 +14,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 final sl = GetIt.instance;
 
 Future<void> init() async {
-  sl.registerFactory(() => RepositoryListBloc(getRepositories: sl()));
+  sl.registerFactory(() => RepositoryListBloc(
+        getRepositories: sl(),
+        networkInfo: sl(),
+      ));
 
   sl.registerLazySingleton(() => GetRepositories(sl()));
 
@@ -30,6 +33,8 @@ Future<void> init() async {
       () => RepositoryRemoteDatasourceImpl(client));
 
   final SharedPreferences prefs = await SharedPreferences.getInstance();
+  // sl.registerLazySingleton<SharedPreferences>(() => prefs);
+
   sl.registerLazySingleton<RepositoryLocalDatasource>(
       () => RepositoryLocalDatasourceImpl(prefs));
 

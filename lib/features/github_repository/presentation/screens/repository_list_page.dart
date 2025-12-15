@@ -50,6 +50,8 @@ class _RepositoryListPageState extends State<RepositoryListPage> {
                   child: ErrorDisplayWidget(
                     message: state.message,
                     onRetry: () {
+                      debugPrint(
+                          '===================>> Retry Load Repositories');
                       context
                           .read<RepositoryListBloc>()
                           .add(LoadRepositories());
