@@ -21,6 +21,7 @@ Future<void> init() async {
   sl.registerLazySingleton<RepositoryRepository>(() => RepositoryRepositoryImpl(
         networkInfo: sl(),
         remoteDatasource: sl(),
+        localDatasource: sl(),
       ));
 
   final client = http.Client();
@@ -28,7 +29,7 @@ Future<void> init() async {
   sl.registerLazySingleton<RepositoryRemoteDatasource>(
       () => RepositoryRemoteDatasourceImpl(client));
 
-  final prefs = await SharedPreferences.getInstance();
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
   sl.registerLazySingleton<RepositoryLocalDatasource>(
       () => RepositoryLocalDatasourceImpl(prefs));
 

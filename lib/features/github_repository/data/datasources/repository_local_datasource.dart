@@ -1,13 +1,18 @@
 import 'dart:convert';
 
+import 'package:dartz/dartz.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_github_explorer/core/error/exceptions.dart';
+import 'package:flutter_github_explorer/core/error/failures.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/repository_model.dart';
 
 abstract class RepositoryLocalDatasource {
   /// Save or update repository list in local storage
-  Future<void> cacheRepositories(List<RepositoryModel> repositories);
+  Future<void> cacheRepositories(
+      Either<Failure, List<RepositoryModel>> repositories);
 
   /// Get repository list from local storage
   Future<List<RepositoryModel>> getRepositories();
@@ -24,22 +29,28 @@ class RepositoryLocalDatasourceImpl implements RepositoryLocalDatasource {
   RepositoryLocalDatasourceImpl(this.sharedPreferences);
 
   @override
-  Future<void> cacheRepositories(List<RepositoryModel> repositories) async {
-    try {
-      final jsonList =
-          repositories.map((repo) => jsonEncode(repo.toJson())).toList();
+  Future<void> cacheRepositories(
+      Either<Failure, List<RepositoryModel>> repositories) async {
+    debugPrint('====================>> Caching repositories locally');
+    repositories.fold((f) {
+      throw CacheException();
+    }, (repositories) async {
+      try {
+        final jsonList =
+            repositories.map((repo) => jsonEncode(repo.toJson())).toList();
 
-      final success = await sharedPreferences.setStringList(
-        _cachedRepoKey,
-        jsonList,
-      );
+        final success = await sharedPreferences.setStringList(
+          _cachedRepoKey,
+          jsonList,
+        );
 
-      if (!success) {
+        if (!success) {
+          throw CacheException();
+        }
+      } catch (e) {
         throw CacheException();
       }
-    } catch (e) {
-      throw CacheException();
-    }
+    });
   }
 
   @override

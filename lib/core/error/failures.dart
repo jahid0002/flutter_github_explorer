@@ -20,3 +20,7 @@ class CacheFailure extends Failure {
 class NetworkFailure extends Failure {
   const NetworkFailure([super.message = 'No internet connection']);
 }
+
+class NoDataFailure extends Failure {
+  const NoDataFailure([super.message = 'No data available']);
+}

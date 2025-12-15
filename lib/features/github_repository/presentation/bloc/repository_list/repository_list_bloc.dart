@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_explorer/features/github_repository/domain/usecases/get_repositories.dart';
 import 'package:flutter_github_explorer/features/github_repository/presentation/bloc/repository_list/repository_list_event.dart';
@@ -12,6 +13,7 @@ class RepositoryListBloc
     on<LoadRepositories>((event, emit) async {
       emit(RepositoryListLoading());
       final failureOrRepositories = await getRepositories();
+      debugPrint('===================>> Load Repositories in bloc');
       failureOrRepositories.fold(
         (failure) => emit(RepositoryListError(message: failure.message)),
         (repositories) => emit(RepositoryListLoaded(repositories)),

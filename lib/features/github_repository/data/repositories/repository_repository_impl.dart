@@ -1,22 +1,45 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_github_explorer/core/error/failures.dart';
 import 'package:flutter_github_explorer/core/network/network_info.dart';
+import 'package:flutter_github_explorer/features/github_repository/data/datasources/repository_local_datasource.dart';
 import 'package:flutter_github_explorer/features/github_repository/data/datasources/repository_remote_datasource.dart';
+import 'package:flutter_github_explorer/features/github_repository/data/models/repository_model.dart';
 import 'package:flutter_github_explorer/features/github_repository/domain/entities/repository.dart';
 import 'package:flutter_github_explorer/features/github_repository/domain/repositories/repository_repository.dart';
 
 class RepositoryRepositoryImpl implements RepositoryRepository {
   final RepositoryRemoteDatasource remoteDatasource;
   final NetworkInfo networkInfo;
+  final RepositoryLocalDatasource localDatasource;
 
-  RepositoryRepositoryImpl(
-      {required this.remoteDatasource, required this.networkInfo});
+  RepositoryRepositoryImpl({
+    required this.remoteDatasource,
+    required this.networkInfo,
+    required this.localDatasource,
+  });
   @override
   Future<Either<Failure, List<RepositoryEntity>>> getRepositories() async {
+    debugPrint('===================>> Repository Repository Impl');
+
     if (await networkInfo.isConnected) {
-      return remoteDatasource.fetchRepositories();
+      final remoteResult = await remoteDatasource.fetchRepositories();
+      debugPrint('===================>> Get Remote Data');
+      await localDatasource.cacheRepositories(remoteResult.fold(
+          (l) => Left(l),
+          (repositories) => Right(
+              repositories.map((repo) => repo as RepositoryModel).toList())));
+
+      return remoteResult;
     } else {
-      return Future.value(const Left(NetworkFailure()));
+      if (await localDatasource.hasRepositories() == false) {
+        debugPrint('No local data available');
+        return const Left(NoDataFailure());
+      }
+      final localResult = await localDatasource.getRepositories();
+      debugPrint(
+          'Returning local data with ${localResult.length} repositories');
+      return Right(localResult);
     }
   }
   // Implementation details...
