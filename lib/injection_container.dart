@@ -18,7 +18,6 @@ final sl = GetIt.instance;
 Future<void> init() async {
   sl.registerFactory(() => RepositoryListBloc(
         getRepositories: sl(),
-        networkInfo: sl(),
         sortPreferenceManager: sl(),
       ));
 

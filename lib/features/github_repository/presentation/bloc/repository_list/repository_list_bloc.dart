@@ -1,6 +1,5 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_github_explorer/core/network/network_info.dart';
 
 import 'package:flutter_github_explorer/core/utils/constants.dart';
 import 'package:flutter_github_explorer/core/utils/sort_preference_manager.dart';
@@ -12,12 +11,11 @@ import 'repository_list_state.dart';
 class RepositoryListBloc
     extends Bloc<RepositoryListEvent, RepositoryListState> {
   final GetRepositories getRepositories;
-  final NetworkInfo networkInfo;
+
   final SortPreferenceManager sortPreferenceManager;
 
   RepositoryListBloc({
     required this.getRepositories,
-    required this.networkInfo,
     required this.sortPreferenceManager,
   }) : super(RepositoryListInitial()) {
     on<LoadRepositories>(_onLoadRepositories);
@@ -86,10 +84,7 @@ class RepositoryListBloc
           final bStars = b.stargazersCount ?? 0;
           return bStars.compareTo(aStars);
         });
-      }
-
-      /// 🕒 Sort by Updated At
-      else if (event.sortBy == Constants.sortByUpdated) {
+      } else if (event.sortBy == Constants.sortByUpdated) {
         sortedRepos.sort((a, b) {
           final aUpdated = DateTime.tryParse(a.updatedAt ?? '') ??
               DateTime.fromMillisecondsSinceEpoch(0);
