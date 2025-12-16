@@ -21,57 +21,95 @@ class RepositoryRepositoryImpl implements RepositoryRepository {
   });
 
   @override
+  @override
   Future<Either<Failure, List<RepositoryEntity>>> getRepositories() async {
-    debugPrint('===================>> Repository Repository Impl');
+    debugPrint('===================>> Repository Impl: Checking network...');
 
-    if (await networkInfo.isConnected) {
-      final remoteResult = await remoteDatasource.fetchRepositories();
+    try {
+      final isConnected = await networkInfo.isConnected;
+      debugPrint('===================>> Network connected: $isConnected');
 
-      return await remoteResult.fold(
-        (failure) async {
-          if (await localDatasource.hasRepositories()) {
-            final localData = await localDatasource.getRepositories();
-            return Right(localData);
-          }
-          return Left(failure);
-        },
-        (remoteData) async {
-          await localDatasource
-              .cacheRepositories(remoteData as List<RepositoryModel>);
-          return Right(remoteData);
-        },
-      );
-    } else {
-      if (await localDatasource.hasRepositories()) {
-        final localData = await localDatasource.getRepositories();
-        return Right(localData);
+      if (isConnected) {
+        // Try remote first
+        debugPrint('===================>> Fetching from remote...');
+        final remoteResult = await remoteDatasource.fetchRepositories();
+
+        return await remoteResult.fold(
+          (failure) async {
+            debugPrint(
+                '===================>> Remote failed: ${failure.message}');
+            debugPrint('===================>> Trying local cache...');
+
+            // Fallback to local
+            if (await localDatasource.hasRepositories()) {
+              final localData = await localDatasource.getRepositories();
+              debugPrint(
+                  '===================>> Loaded ${localData.length} from cache');
+              return Right(localData);
+            }
+
+            debugPrint('===================>> No cache available');
+            return Left(failure);
+          },
+          (remoteData) async {
+            debugPrint(
+                '===================>> Remote success: ${remoteData.length} repos');
+            // Cache the data
+            await localDatasource
+                .cacheRepositories(remoteData as List<RepositoryModel>);
+            debugPrint('===================>> Data cached successfully');
+            return Right(remoteData);
+          },
+        );
+      } else {
+        // Offline - use cache
+        debugPrint('===================>> Offline mode, using cache...');
+
+        if (await localDatasource.hasRepositories()) {
+          final localData = await localDatasource.getRepositories();
+          debugPrint(
+              '===================>> Loaded ${localData.length} from cache');
+          return Right(localData);
+        }
+
+        debugPrint('===================>> No cache available in offline mode');
+        return const Left(NetworkFailure(
+            // message: 'No internet and no cached data',
+            ));
       }
-      return const Left(NetworkFailure());
+    } catch (e) {
+      debugPrint('===================>> Exception in repository: $e');
+      return const Left(ServerFailure(
+          //message: 'Unexpected error: $e'
+          ));
     }
   }
-  // @override
   // Future<Either<Failure, List<RepositoryEntity>>> getRepositories() async {
   //   debugPrint('===================>> Repository Repository Impl');
 
   //   if (await networkInfo.isConnected) {
   //     final remoteResult = await remoteDatasource.fetchRepositories();
-  //     debugPrint('===================>> Get Remote Data');
-  //     await localDatasource.cacheRepositories(remoteResult.fold(
-  //         (l) => Left(l),
-  //         (repositories) => Right(
-  //             repositories.map((repo) => repo as RepositoryModel).toList())));
 
-  //     return remoteResult;
+  //     return await remoteResult.fold(
+  //       (failure) async {
+  //         if (await localDatasource.hasRepositories()) {
+  //           final localData = await localDatasource.getRepositories();
+  //           return Right(localData);
+  //         }
+  //         return Left(failure);
+  //       },
+  //       (remoteData) async {
+  //         await localDatasource
+  //             .cacheRepositories(remoteData as List<RepositoryModel>);
+  //         return Right(remoteData);
+  //       },
+  //     );
   //   } else {
-  //     if (await localDatasource.hasRepositories() == false) {
-  //       debugPrint('No local data available');
-  //       return const Left(NoDataFailure());
+  //     if (await localDatasource.hasRepositories()) {
+  //       final localData = await localDatasource.getRepositories();
+  //       return Right(localData);
   //     }
-  //     final localResult = await localDatasource.getRepositories();
-  //     debugPrint(
-  //         'Returning local data with ${localResult.length} repositories');
-  //     return Right(localResult);
+  //     return const Left(NetworkFailure());
   //   }
   // }
-  // Implementation details...
 }

@@ -20,11 +20,25 @@ class RepositoryListPage extends StatefulWidget {
 }
 
 class _RepositoryListPageState extends State<RepositoryListPage> {
-  @override
-  void initState() {
-    super.initState();
-    context.read<RepositoryListBloc>().add(LoadRepositories());
-  }
+  // bool _hasInitialized = false;
+  // @override
+  // void initState() {
+  //   super.initState();
+
+  //   debugPrint('========this is screen===========>> Init Repository List Page');
+  //   context.read<RepositoryListBloc>().add(LoadRepositories());
+  // }
+
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   if (!_hasInitialized) {
+  //     _hasInitialized = true;
+  //     debugPrint(
+  //         '========Loading Repositories (didChangeDependencies)========');
+  //     context.read<RepositoryListBloc>().add(LoadRepositories());
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
