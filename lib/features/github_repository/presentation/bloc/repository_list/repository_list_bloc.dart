@@ -32,7 +32,7 @@ class RepositoryListBloc
     debugPrint('===================>> Loading with saved sort preference');
 
     // First load the repositories (existing logic)
-    await _onLoadRepositories(LoadRepositories(), emit);
+    await _onLoadRepositories(const LoadRepositories(), emit);
 
     // Then apply saved sort if data loaded successfully
     if (state is RepositoryListLoaded) {

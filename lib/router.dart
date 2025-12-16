@@ -16,17 +16,9 @@ final router = GoRouter(
       path: AppRoutes.repositoryListPage,
       builder: (context, state) => const RepositoryListPage(),
     ),
-
     GoRoute(
       path: AppRoutes.splashScreen,
       builder: (context, state) => const SplashScreen(),
     ),
-    // GoRoute(
-    //   path: '/details/:id',
-    //   builder: (context, state) {
-    //     final id = int.parse(state.pathParameters['id']!);
-    //     return RepositoryDetailsPage(repositoryId: id);
-    //   },
-    // ),
   ],
 );

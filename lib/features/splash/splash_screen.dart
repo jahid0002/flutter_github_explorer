@@ -5,8 +5,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_explorer/features/github_repository/presentation/bloc/repository_list/repository_list_bloc.dart';
 import 'package:flutter_github_explorer/features/github_repository/presentation/bloc/repository_list/repository_list_event.dart';
-import 'package:flutter_github_explorer/features/theme/bloc/theme_bloc.dart';
-import 'package:flutter_github_explorer/features/theme/bloc/theme_event.dart';
 import 'package:flutter_github_explorer/router.dart';
 import 'package:go_router/go_router.dart';
 
