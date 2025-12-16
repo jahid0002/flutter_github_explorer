@@ -1,5 +1,5 @@
 import 'package:flutter_github_explorer/features/github_repository/presentation/screens/repository_list_page.dart';
-import 'package:flutter_github_explorer/features/settings/splash_screen.dart';
+import 'package:flutter_github_explorer/features/splash/splash_screen.dart';
 import 'package:go_router/go_router.dart';
 
 abstract class AppRoutes {

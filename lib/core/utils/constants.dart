@@ -9,6 +9,8 @@ class Constants {
   static const String sortByForks = 'forks';
   static const String sortByUpdated = 'updated';
   static const String sortByName = 'name';
+
+  static const String theme = 'theme';
 }
 
 //https://api.github.com/search/repositories?q=flutter&sort=stars&order=desc&per_page=50

@@ -2,6 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_github_explorer/features/github_repository/presentation/widgets/theme_button.dart';
+import 'package:flutter_github_explorer/features/theme/bloc/theme_bloc.dart';
+import 'package:flutter_github_explorer/features/theme/bloc/theme_event.dart';
+import 'package:flutter_github_explorer/features/theme/bloc/theme_state.dart';
 
 import '../bloc/repository_list/repository_list_bloc.dart';
 import '../bloc/repository_list/repository_list_event.dart';
@@ -47,7 +51,7 @@ class _RepositoryListPageState extends State<RepositoryListPage> {
                           '===================>> Retry Load Repositories');
                       context
                           .read<RepositoryListBloc>()
-                          .add(LoadRepositories());
+                          .add(const LoadRepositories());
                     },
                   ),
                 );
@@ -67,6 +71,7 @@ class _RepositoryListPageState extends State<RepositoryListPage> {
 
     return SliverAppBar(
       expandedHeight: 120,
+      collapsedHeight: 70,
       floating: true,
       pinned: true,
       elevation: 0,
@@ -137,24 +142,20 @@ class _RepositoryListPageState extends State<RepositoryListPage> {
           },
         ),
         const SizedBox(width: 8),
-        // BlocBuilder<RepositoryListBloc, RepositoryListState>(
-        //   builder: (context, state) {
-        //     if (state is RepositoryListLoaded) {
-        //       return SortButton(
-        //         currentSort: state.repositories.isEmpty
-        //             ? Constants.sortByStars
-        //             : Constants.sortByStars,
-        //         onSortChanged: (sortBy) {
-        //           context.read<RepositoryListBloc>().add(
-        //                 SortRepositories(sortBy),
-        //               );
-        //         },
-        //       );
-        //     }
-        //     return const SizedBox.shrink();
-        //   },
-        // ),
-        // const SizedBox(width: 8),
+        BlocBuilder<ThemeBloc, ThemeState>(builder: (context, state) {
+          if (state is ThemeLoaded) {
+            return ThemeToggleButton(
+              isDarkMode: state.isDarkMode,
+              onToggle: () {
+                context.read<ThemeBloc>().add(const ToggleTheme());
+              },
+            );
+          } else {
+            return const SizedBox.shrink();
+          }
+          // return const SizedBox.shrink();
+        }),
+        const SizedBox(width: 8),
       ],
     );
   }

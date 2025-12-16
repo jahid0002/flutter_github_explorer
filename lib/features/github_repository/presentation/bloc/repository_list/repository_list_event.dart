@@ -7,7 +7,12 @@ abstract class RepositoryListEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadRepositories extends RepositoryListEvent {}
+class LoadRepositories extends RepositoryListEvent {
+  const LoadRepositories();
+
+  @override
+  List<Object> get props => [];
+}
 
 class RefreshRepositories extends RepositoryListEvent {}
 

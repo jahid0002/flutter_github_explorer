@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_github_explorer/features/theme/bloc/theme_bloc.dart';
+import 'package:flutter_github_explorer/features/theme/bloc/theme_event.dart';
+import 'package:flutter_github_explorer/features/theme/bloc/theme_state.dart';
 
 import 'injection_container.dart' as di;
 import 'router.dart';
@@ -25,22 +28,59 @@ class MyApp extends StatelessWidget {
           lazy: false,
           create: (_) => di.sl<RepositoryListBloc>(),
         ),
+        BlocProvider<ThemeBloc>(
+          lazy: false,
+          create: (_) => di.sl<ThemeBloc>()..add(const LoadTheme()),
+        ),
       ],
-      child: MaterialApp.router(
-        title: 'GitHub Explorer',
-        debugShowCheckedModeBanner: false,
+      child: BlocBuilder<ThemeBloc, ThemeState>(
+        builder: (context, state) {
+          final isDarkMode = state is ThemeLoaded && state.isDarkMode;
 
-        // Themes
-        theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme,
-        themeMode: ThemeMode.system,
-
-        // Router
-        routerConfig: router,
+          return MaterialApp.router(
+            title: 'GitHub Explorer',
+            debugShowCheckedModeBanner: false,
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
+            routerConfig: router,
+          );
+        },
       ),
     );
   }
 }
+// class MyApp extends StatelessWidget {
+//   const MyApp({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return MultiBlocProvider(
+//       providers: [
+//         BlocProvider<RepositoryListBloc>(
+//           lazy: false,
+//           create: (_) => di.sl<RepositoryListBloc>(),
+//         ),
+//         BlocProvider<ThemeBloc>(
+//           // lazy: false,
+//           create: (_) => di.sl<ThemeBloc>(),
+//         ),
+//       ],
+//       child: MaterialApp.router(
+//         title: 'GitHub Explorer',
+//         debugShowCheckedModeBanner: false,
+
+//         // Themes
+//         theme: AppTheme.lightTheme,
+//         darkTheme: AppTheme.darkTheme,
+//         themeMode: ThemeMode.system,
+
+//         // Router
+//         routerConfig: router,
+//       ),
+//     );
+//   }
+// }
 
 
 
