@@ -73,43 +73,11 @@ class RepositoryRepositoryImpl implements RepositoryRepository {
         }
 
         debugPrint('===================>> No cache available in offline mode');
-        return const Left(NetworkFailure(
-            // message: 'No internet and no cached data',
-            ));
+        return const Left(NetworkFailure());
       }
     } catch (e) {
       debugPrint('===================>> Exception in repository: $e');
-      return const Left(ServerFailure(
-          //message: 'Unexpected error: $e'
-          ));
+      return const Left(ServerFailure());
     }
   }
-  // Future<Either<Failure, List<RepositoryEntity>>> getRepositories() async {
-  //   debugPrint('===================>> Repository Repository Impl');
-
-  //   if (await networkInfo.isConnected) {
-  //     final remoteResult = await remoteDatasource.fetchRepositories();
-
-  //     return await remoteResult.fold(
-  //       (failure) async {
-  //         if (await localDatasource.hasRepositories()) {
-  //           final localData = await localDatasource.getRepositories();
-  //           return Right(localData);
-  //         }
-  //         return Left(failure);
-  //       },
-  //       (remoteData) async {
-  //         await localDatasource
-  //             .cacheRepositories(remoteData as List<RepositoryModel>);
-  //         return Right(remoteData);
-  //       },
-  //     );
-  //   } else {
-  //     if (await localDatasource.hasRepositories()) {
-  //       final localData = await localDatasource.getRepositories();
-  //       return Right(localData);
-  //     }
-  //     return const Left(NetworkFailure());
-  //   }
-  // }
 }

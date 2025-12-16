@@ -30,6 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
     debugPrint('========== Splash: Starting initialization ==========');
 
     // Now it's safe to use context
+    context.read<RepositoryListBloc>().add(LoadRepositoriesWithSavedSort());
     context.read<RepositoryListBloc>().add(LoadRepositories());
 
     // Wait for splash duration

@@ -19,3 +19,5 @@ class SortRepositories extends RepositoryListEvent {
   @override
   List<Object> get props => [sortBy];
 }
+
+class LoadRepositoriesWithSavedSort extends RepositoryListEvent {}

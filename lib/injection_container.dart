@@ -1,5 +1,6 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_github_explorer/core/network/network_info.dart';
+import 'package:flutter_github_explorer/core/utils/sort_preference_manager.dart';
 import 'package:flutter_github_explorer/features/github_repository/data/datasources/repository_local_datasource.dart';
 import 'package:flutter_github_explorer/features/github_repository/data/datasources/repository_remote_datasource.dart';
 import 'package:flutter_github_explorer/features/github_repository/data/repositories/repository_repository_impl.dart';
@@ -17,6 +18,7 @@ Future<void> init() async {
   sl.registerFactory(() => RepositoryListBloc(
         getRepositories: sl(),
         networkInfo: sl(),
+        sortPreferenceManager: sl(),
       ));
 
   sl.registerLazySingleton(() => GetRepositories(sl()));
@@ -37,6 +39,8 @@ Future<void> init() async {
 
   sl.registerLazySingleton<RepositoryLocalDatasource>(
       () => RepositoryLocalDatasourceImpl(prefs));
+
+  sl.registerLazySingleton(() => SortPreferenceManager(prefs));
 
   // Connectivity
   sl.registerLazySingleton(() => Connectivity());

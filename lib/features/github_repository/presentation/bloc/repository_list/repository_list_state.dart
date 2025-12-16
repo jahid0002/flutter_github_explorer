@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter_github_explorer/core/utils/constants.dart';
 import 'package:flutter_github_explorer/features/github_repository/domain/entities/repository.dart';
 
 abstract class RepositoryListState extends Equatable {
@@ -14,11 +15,13 @@ class RepositoryListLoading extends RepositoryListState {}
 
 class RepositoryListLoaded extends RepositoryListState {
   final List<RepositoryEntity> repositories;
+  final String currentSort;
 
-  const RepositoryListLoaded(this.repositories);
+  const RepositoryListLoaded(this.repositories,
+      {this.currentSort = Constants.sortByStars});
 
   @override
-  List<Object> get props => [repositories];
+  List<Object> get props => [repositories, currentSort];
 }
 
 class RepositoryListError extends RepositoryListState {

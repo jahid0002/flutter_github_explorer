@@ -2,8 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_github_explorer/core/utils/constants.dart';
-import 'package:go_router/go_router.dart';
+
 import '../bloc/repository_list/repository_list_bloc.dart';
 import '../bloc/repository_list/repository_list_event.dart';
 import '../bloc/repository_list/repository_list_state.dart';
@@ -20,26 +19,6 @@ class RepositoryListPage extends StatefulWidget {
 }
 
 class _RepositoryListPageState extends State<RepositoryListPage> {
-  // bool _hasInitialized = false;
-  // @override
-  // void initState() {
-  //   super.initState();
-
-  //   debugPrint('========this is screen===========>> Init Repository List Page');
-  //   context.read<RepositoryListBloc>().add(LoadRepositories());
-  // }
-
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   if (!_hasInitialized) {
-  //     _hasInitialized = true;
-  //     debugPrint(
-  //         '========Loading Repositories (didChangeDependencies)========');
-  //     context.read<RepositoryListBloc>().add(LoadRepositories());
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -146,9 +125,7 @@ class _RepositoryListPageState extends State<RepositoryListPage> {
           builder: (context, state) {
             if (state is RepositoryListLoaded) {
               return SortButton(
-                currentSort: state.repositories.isEmpty
-                    ? Constants.sortByStars
-                    : Constants.sortByStars,
+                currentSort: state.currentSort,
                 onSortChanged: (sortBy) {
                   context.read<RepositoryListBloc>().add(
                         SortRepositories(sortBy),
@@ -160,6 +137,24 @@ class _RepositoryListPageState extends State<RepositoryListPage> {
           },
         ),
         const SizedBox(width: 8),
+        // BlocBuilder<RepositoryListBloc, RepositoryListState>(
+        //   builder: (context, state) {
+        //     if (state is RepositoryListLoaded) {
+        //       return SortButton(
+        //         currentSort: state.repositories.isEmpty
+        //             ? Constants.sortByStars
+        //             : Constants.sortByStars,
+        //         onSortChanged: (sortBy) {
+        //           context.read<RepositoryListBloc>().add(
+        //                 SortRepositories(sortBy),
+        //               );
+        //         },
+        //       );
+        //     }
+        //     return const SizedBox.shrink();
+        //   },
+        // ),
+        // const SizedBox(width: 8),
       ],
     );
   }
@@ -182,7 +177,7 @@ class _RepositoryListPageState extends State<RepositoryListPage> {
               child: RepositoryCard(
                 repository: repository,
                 onTap: () {
-                  context.push('/details/${repository.id}');
+                  //  context.push('/details/${repository.id}');
                 },
               ),
             );

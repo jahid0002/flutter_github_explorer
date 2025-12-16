@@ -1,4 +1,4 @@
-// ignore_for_file: unnecessary_null_comparison, unused_element
+// ignore_for_file: unnecessary_null_comparison, unused_element, deprecated_member_use
 
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -83,7 +83,7 @@ class RepositoryCard extends StatelessWidget {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20),
                           child: CachedNetworkImage(
-                            imageUrl: repository.owner.avatarUrl,
+                            imageUrl: repository.owner?.avatarUrl ?? '',
                             width: 40,
                             height: 40,
                             placeholder: (context, url) => Container(
@@ -111,7 +111,7 @@ class RepositoryCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            repository.name,
+                            repository.name ?? 'N/A',
                             style: theme.textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
@@ -130,7 +130,7 @@ class RepositoryCard extends StatelessWidget {
                               const SizedBox(width: 4),
                               Expanded(
                                 child: Text(
-                                  repository.owner.login,
+                                  repository.owner?.login ?? '',
                                   style: theme.textTheme.bodySmall?.copyWith(
                                     color: Colors.grey,
                                   ),
@@ -185,7 +185,7 @@ class RepositoryCard extends StatelessWidget {
 
                 // Description with gradient overlay
                 if (repository.description != null &&
-                    repository.description.isNotEmpty)
+                    repository.description!.isNotEmpty)
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
@@ -197,7 +197,7 @@ class RepositoryCard extends StatelessWidget {
                       ),
                     ),
                     child: Text(
-                      repository.description,
+                      repository.description ?? 'No description provided.',
                       style: theme.textTheme.bodyMedium?.copyWith(
                         height: 1.4,
                       ),
@@ -213,13 +213,13 @@ class RepositoryCard extends StatelessWidget {
                   children: [
                     _buildStatChip(
                       Icons.star,
-                      _formatNumber(repository.stars),
+                      _formatNumber(repository.stargazersCount ?? 0),
                       AppColors.starColor,
                     ),
                     const SizedBox(width: 12),
                     _buildStatChip(
                       Icons.fork_right,
-                      _formatNumber(repository.forks),
+                      _formatNumber(repository.forks ?? 0),
                       AppColors.forkColor,
                     ),
                   ],
@@ -230,8 +230,8 @@ class RepositoryCard extends StatelessWidget {
                 // Bottom row
                 Row(
                   children: [
-                    if (repository.language.isNotEmpty)
-                      _buildLanguageChip(repository.language, theme),
+                    if (repository.language?.isNotEmpty ?? false)
+                      _buildLanguageChip(repository.language ?? '', theme),
                     const SizedBox(width: 8),
                     // Expanded(
                     //   child: _buildUpdateChip(repository., theme),
