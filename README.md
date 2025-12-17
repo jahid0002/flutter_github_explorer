@@ -135,13 +135,9 @@ cd flutter_github_explorer
 flutter pub get
 ```
 
-3. Generate Hive adapters
 
-```bash
-flutter pub run build_runner build --delete-conflicting-outputs
-```
 
-4. Run the app
+3. Run the app
 
 ```bash
 flutter run
