@@ -3,9 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_github_explorer/features/github_repository/presentation/widgets/theme_button.dart';
-import 'package:flutter_github_explorer/features/theme/bloc/theme_bloc.dart';
-import 'package:flutter_github_explorer/features/theme/bloc/theme_event.dart';
-import 'package:flutter_github_explorer/features/theme/bloc/theme_state.dart';
+import 'package:flutter_github_explorer/core/theme/bloc/theme_bloc.dart';
+import 'package:flutter_github_explorer/core/theme/bloc/theme_event.dart';
+import 'package:flutter_github_explorer/core/theme/bloc/theme_state.dart';
 
 import '../bloc/repository_list/repository_list_bloc.dart';
 import '../bloc/repository_list/repository_list_event.dart';

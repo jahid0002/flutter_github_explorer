@@ -7,7 +7,7 @@ import 'package:flutter_github_explorer/features/github_repository/data/reposito
 import 'package:flutter_github_explorer/features/github_repository/domain/repositories/repository_repository.dart';
 import 'package:flutter_github_explorer/features/github_repository/domain/usecases/get_repositories.dart';
 import 'package:flutter_github_explorer/features/github_repository/presentation/bloc/repository_list/repository_list_bloc.dart';
-import 'package:flutter_github_explorer/features/theme/bloc/theme_bloc.dart';
+import 'package:flutter_github_explorer/core/theme/bloc/theme_bloc.dart';
 
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
